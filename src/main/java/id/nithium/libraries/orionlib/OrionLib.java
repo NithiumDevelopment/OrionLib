@@ -18,7 +18,7 @@ public class OrionLib {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database,
                     username, password);
-            System.out.println("Connected to connection of " + host + ":" + port + "/" + database + ".");
+            System.out.println("Connected to connection of " + host + ":" + port + "/" + database + " from OrionLib.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
