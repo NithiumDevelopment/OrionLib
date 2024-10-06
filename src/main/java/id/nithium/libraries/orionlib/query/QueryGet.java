@@ -1,5 +1,6 @@
 package id.nithium.libraries.orionlib.query;
 
+import id.nithium.libraries.orionlib.OrionLib;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;
@@ -7,8 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class QueryGet<A> {
+
+    private OrionLib orionLib = OrionLib.getInstance();
     private Connection connection;
     private String query;
     private SelectCall<A> selectCall;
@@ -22,25 +27,30 @@ public class QueryGet<A> {
         this.selectCall = selectCall;
         this.params = params;
 
-        System.out.println("(IGNORE THIS) Executing query: \"" + query + "\"");
+        orionLib.debug("Executing query: \"" + query + "\"");
+        orionLib.debug("Params: " + params.toString());
         setup();
     }
 
-    private void setup() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            for (int i = 0; i < params.size(); i++) {
-                preparedStatement.setObject((i + 1), params.get(i));
+    private CompletableFuture<A> setup() {
+        return CompletableFuture.supplyAsync(() -> {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                for (int i = 0; i < params.size(); i++) {
+                    preparedStatement.setObject((i + 1), params.get(i));
+                }
+
+                orionLib.debug("Done executing query: \"" + query + "\"");
+                a = selectCall.call(preparedStatement.executeQuery());
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
-            System.out.println("(IGNORE THIS) Done executing query: \"" + query + "\"");
-            a = selectCall.call(preparedStatement.executeQuery());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            return a;
+        }, orionLib.getExecutorService());
     }
 
-    public A get() {
-        System.out.println("(IGNORE THIS) Getting object of " + a.toString());
-        return a;
+    public A get() throws InterruptedException, ExecutionException {
+        orionLib.debug("Getting object of " + a.toString());
+        return setup().get();
     }
 }

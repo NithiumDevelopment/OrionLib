@@ -12,5 +12,6 @@ public class QuerySetTest {
 
         new QuerySet(MainTest.getConnection(), "update orionlib set id = ? where username = ?", List.of(uuid.toString(), "username123"));
         System.out.println("Changed user id of username123 to " + uuid);
+
     }
 }

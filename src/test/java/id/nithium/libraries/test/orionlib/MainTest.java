@@ -21,9 +21,6 @@ public class MainTest {
     public static void main(String[] args) {
         setInstance(new MainTest());
 
-        orionLib = OrionLib.setInstance();
-        connection = orionLib.createNewConnection("localhost", 3306, "orionlib", "root", null);
-
         QueryGetTest.main(args);
     }
 }
