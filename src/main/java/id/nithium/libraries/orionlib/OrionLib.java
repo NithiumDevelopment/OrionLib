@@ -16,7 +16,7 @@ public class OrionLib {
 
     private static OrionLib orion;
     private HikariDataSource hikariDataSource;
-    private ExecutorService executorService = Executors.newCachedThreadPool();
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     @Setter
     private boolean debug = false;
