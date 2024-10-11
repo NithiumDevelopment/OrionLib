@@ -47,8 +47,8 @@ public class QueryGet<A> {
         }, orionLib.getExecutorService());
     }
 
-    public A get() throws InterruptedException, ExecutionException {
-        orionLib.debug("Getting object of " + a.toString());
+    public A get() {
+        orionLib.debug("Getting object of " + a);
         return a;
     }
 }
