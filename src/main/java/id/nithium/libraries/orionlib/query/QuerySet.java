@@ -30,18 +30,16 @@ public class QuerySet {
     }
 
     private void setup() {
-        CompletableFuture.runAsync(() -> {
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                for (int i = 0; i < params.size(); i++) {
-                    preparedStatement.setObject((i + 1), params.get(i));
-                }
-                preparedStatement.executeUpdate();
-                next = true;
-                orionLib.debug("Done executing query: \"" + query + "\"");
-            } catch (SQLException e) {
-                e.printStackTrace();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            for (int i = 0; i < params.size(); i++) {
+                preparedStatement.setObject((i + 1), params.get(i));
             }
-        }, orionLib.getExecutorService());
+            preparedStatement.executeUpdate();
+            next = true;
+            orionLib.debug("Done executing query: \"" + query + "\"");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean next() {
