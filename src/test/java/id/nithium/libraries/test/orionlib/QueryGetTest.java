@@ -20,14 +20,8 @@ public class QueryGetTest {
             return userTest;
         }, List.of("username123"));
 
-        UserTest userTest = null;
-        try {
-            userTest = userTestQueryGet.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        UserTest userTest = userTestQueryGet.get();
+
         if (userTest != null) {
             System.out.println("User: " + userTest.getUuid() + ", "  + userTest.getUsername());
 
