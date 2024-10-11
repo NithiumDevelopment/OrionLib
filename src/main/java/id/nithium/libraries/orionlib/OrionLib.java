@@ -21,7 +21,7 @@ public class OrionLib {
     @Setter
     private boolean debug = false;
 
-    public Connection createNewConnection(String host, int port, String database, String username, String password, boolean ssl) {
+    public Connection createNewConnection(String host, int port, String database, String username, String password) {
         Connection connection = null;
 
         System.out.println("Connecting MySQL to \"" + host + ":" + port + "/" + database + "\" from OrionLib...");
@@ -30,7 +30,6 @@ public class OrionLib {
             hikariConfig.setJdbcUrl("jdbc:mysql://" + host+ ":" + port + "/" + database);
             hikariConfig.setUsername(username);
             hikariConfig.setPassword(password);
-            hikariConfig.addDataSourceProperty("useSSL", ssl);
 
             hikariDataSource = new HikariDataSource(hikariConfig);
             connection = hikariDataSource.getConnection();

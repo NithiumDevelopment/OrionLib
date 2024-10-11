@@ -32,8 +32,8 @@ public class QueryGet<A> {
         setup();
     }
 
-    private CompletableFuture<A> setup() {
-        return CompletableFuture.supplyAsync(() -> {
+    private void setup() {
+        CompletableFuture.runAsync(() -> {
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 for (int i = 0; i < params.size(); i++) {
                     preparedStatement.setObject((i + 1), params.get(i));
@@ -44,13 +44,11 @@ public class QueryGet<A> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-            return a;
         }, orionLib.getExecutorService());
     }
 
     public A get() throws InterruptedException, ExecutionException {
         orionLib.debug("Getting object of " + a.toString());
-        return setup().get();
+        return a;
     }
 }
