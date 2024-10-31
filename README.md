@@ -2,7 +2,22 @@
 Java MySQL library.
 
 ## Install dependency
-Maven
+Gradle:
+```gradle
+	dependencyResolutionManagement {
+		repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+		repositories {
+			mavenCentral()
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+```gradle
+	dependencies {
+	        implementation 'com.github.NithiumDevelopment:OrionLib:Tag'
+	}
+```
+Maven:
 ```xml
 	<repositories>
 		<repository>
