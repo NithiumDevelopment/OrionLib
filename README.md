@@ -99,3 +99,30 @@ public class Main {
         System.out.println("User: " + user.getUuid() + ", "  + user.getUsername());
     }
 }
+```
+### QuerySet usage
+QuerySet is used to set column field in database.
+```java
+package id.nithium.libraries.test.orionlib;
+
+import id.nithium.libraries.orionlib.OrionLib;
+import id.nithium.libraries.orionlib.query.QueryGet;
+
+import java.sql.Connection;
+import java.util.List;
+import java.util.UUID;
+
+public class Main {
+
+    @Getter
+    private static OrionLib orionLib;
+    @Getter
+    private static Connection connection;
+
+    public static void main(String[] args) {
+        new QuerySet(MainTest.getConnection(), "update database set id = ? where username = ?", List.of(uuid.toString(), "username123"));
+        System.out.println("Changed user id of username123 to " + uuid);
+
+    }
+}
+```
