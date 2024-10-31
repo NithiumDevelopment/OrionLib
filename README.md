@@ -2,7 +2,7 @@
 Java MySQL library.
 
 ## Install dependency
-Use the lattest commit id.
+Use the latest commit id.
 Gradle:
 ```gradle
 	dependencyResolutionManagement {
