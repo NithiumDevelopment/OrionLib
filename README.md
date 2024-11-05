@@ -160,3 +160,5 @@ After:
 | .. | .. |
 
 ## License
+
+OrionLib is licensed under the permissive of MIT LICENSE, for more information please read [`LICENSE`](https://github.com/NithiumDevelopment/OrionLib/blob/master/LICENSE)
