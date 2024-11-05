@@ -1,5 +1,5 @@
 # OrionLib
-Java MySQL library.
+OrionLib is a MySQL library built with the Java programming language. It makes it easier for developers to execute MySQL commands, especially for operations like SELECT and UPDATE. It also uses dependencies such as HikariCP and mysql-connector-java.
 
 ## Install dependency
 Recommeded to use the latest commit id.
