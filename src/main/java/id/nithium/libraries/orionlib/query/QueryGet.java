@@ -49,4 +49,12 @@ public class QueryGet<A> {
         orionLib.debug("Getting object of " + a);
         return a;
     }
+
+    public boolean isPresent() {
+        return get() != null;
+    }
+
+    public boolean isEmpty() {
+        return !isPresent();
+    }
 }
