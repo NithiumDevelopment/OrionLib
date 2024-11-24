@@ -134,7 +134,7 @@ new QuerySet(connection, "CREATE TABLE IF NOT EXISTS table(a VARCHAR(255), PRIMA
 To set current variable class to database.
 
 > [!NOTE]
-> ObjectUpdater still on development
+> ObjectUpdater still on development (Also unoptimized)
 
 ```java
 // ..
