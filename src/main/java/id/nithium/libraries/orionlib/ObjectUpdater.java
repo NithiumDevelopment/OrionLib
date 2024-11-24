@@ -1,7 +1,6 @@
 package id.nithium.libraries.orionlib;
 
-import id.nithium.libraries.orionlib.query.QuerySet;
-import lombok.Cleanup;
+import id.nithium.libraries.orionlib.query.QueryGet;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -10,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ObjectUpdater<A> {
 
@@ -19,17 +19,20 @@ public class ObjectUpdater<A> {
     private final A obj;
 
     private final Field[] allFields;
-    private String query;
-    private List<Field> existsFieldsInRow = new ArrayList<>();
+    private final Object primary;
 
-    public ObjectUpdater(Connection connection, String tableName, A obj) {
+    private final List<Field> existFields = new ArrayList<>();
+
+    public ObjectUpdater(Connection connection, String tableName, A obj, Object primary) throws SQLException {
         this.connection = connection;
         this.tableName = tableName;
         this.obj = obj;
+        this.primary = primary;
 
         allFields = obj.getClass().getDeclaredFields();
-        orionLib.debug("Start checking rows... (May take awhile)");
+        System.out.println("Start checking rows... (May take awhile)");
         startCheck();
+        setup();
     }
 
     public void startCheck() {
@@ -47,27 +50,69 @@ public class ObjectUpdater<A> {
             while (resultSet.next()) {
                 for (Field field : allFields) {
                     Object object = resultSet.getObject(field.getName());
-                    existsFieldsInRow.add(field);
+
+                    field.setAccessible(true);
+                    Object object1 = field.get(obj);
+                    if (object != null) {
+                        if (!object1.toString().equals(object.toString())) {
+                            existFields.add(field);
+                        }
+                    }
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        query = stringBuilder.toString();
+        System.out.println(stringBuilder);
+        System.out.println("Exist field: " + existFields.toString());
         orionLib.debug("Done checking!");
     }
 
     public void setup() {
-        List<Object> fields = new ArrayList<>();
-        for (Field field : obj.getClass().getDeclaredFields()) {
-            assert field.getName().startsWith("get");
-
-            fields.add(field);
+        List<Object> objects = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder("update " + tableName);
+        for (Field field : existFields) {
+            field.setAccessible(true);
+            try {
+                Object object = field.get(obj);
+                objects.add(object);
+                stringBuilder.append(" set ").append(field.getName()).append(" = ?, ");
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        if (new QuerySet(connection, query, fields).next()) {
+        for (int i = 0; i < 2; i++) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
 
+        String primaryName = "";
+        for (Field field : allFields) {
+            field.setAccessible(true);
+
+            try {
+                Object object = field.get(obj);
+                if (object.toString().equals(primary.toString())) {
+                    primaryName = field.getName();
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        stringBuilder.append(" where ").append(primaryName).append(" = ?");
+
+        System.out.println(stringBuilder.toString());
+        try (PreparedStatement preparedStatement = connection.prepareStatement(stringBuilder.toString())) {
+            for (int i = 0; i < objects.size(); i++) {
+                preparedStatement.setObject((i + 1), objects.get(i));
+            }
+            preparedStatement.setObject((objects.size() + 1), primary);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

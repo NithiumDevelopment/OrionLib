@@ -6,7 +6,7 @@
 
     <groupId>id.nithium.libraries.orionlib</groupId>
     <artifactId>OrionLib</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>dev-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>22</maven.compiler.source>

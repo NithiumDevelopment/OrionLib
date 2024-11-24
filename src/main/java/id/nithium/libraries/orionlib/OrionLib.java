@@ -2,14 +2,11 @@ package id.nithium.libraries.orionlib;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import id.nithium.libraries.orionlib.query.QuerySet;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Getter
 public class OrionLib {

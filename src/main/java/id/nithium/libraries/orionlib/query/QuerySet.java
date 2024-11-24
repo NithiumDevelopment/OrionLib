@@ -19,7 +19,7 @@ public class QuerySet {
     @Getter
     private boolean next = false;
 
-    public QuerySet(Connection connection, String query, List<Object> params) {
+    public QuerySet(Connection connection, String query, List<Object> params) throws SQLException {
         this.connection = connection;
         this.query = query;
         this.params = params;

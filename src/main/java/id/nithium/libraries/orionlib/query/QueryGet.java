@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -21,7 +22,7 @@ public class QueryGet<A> {
 
     A a;
 
-    public QueryGet(Connection connection, String query, SelectCall<A> selectCall, List<Object> params) {
+    public QueryGet(Connection connection, String query, SelectCall<A> selectCall, List<Object> params) throws SQLException {
         this.connection = connection;
         this.query = query;
         this.selectCall = selectCall;
@@ -45,16 +46,8 @@ public class QueryGet<A> {
         }
     }
 
-    public A get() {
+    public Optional<A> get() {
         orionLib.debug("Getting object of " + a);
-        return a;
-    }
-
-    public boolean isPresent() {
-        return get() != null;
-    }
-
-    public boolean isEmpty() {
-        return !isPresent();
+        return Optional.of(a);
     }
 }
