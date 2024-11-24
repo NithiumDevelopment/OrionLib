@@ -134,7 +134,7 @@ new QuerySet(connection, "CREATE TABLE IF NOT EXISTS table(a VARCHAR(255), PRIMA
 To set current variable class to database.
 
 > [!NOTE]
-> Class must have getter method.
+> ObjectUpdater still on development
 
 ```java
 // ..
